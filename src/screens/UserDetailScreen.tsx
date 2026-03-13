@@ -203,21 +203,22 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "flex-start",
         paddingVertical: 10,
         borderBottomWidth: 1,
         borderBottomColor: colors.border,
     },
     rowLabel: {
+        width: 90,
         fontSize: 14,
-        color: colors.textSecondary
+        color: colors.textSecondary,
     },
     rowValue: {
+        flex: 1,
         fontSize: 14,
         fontWeight: "500",
         color: colors.textPrimary,
-        maxWidth: "60%",
-        textAlign: "right"
+        textAlign: "right",
     },
     buttons: {
         marginTop: 30,
