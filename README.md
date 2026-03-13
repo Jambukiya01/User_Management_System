@@ -1,97 +1,501 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# 📱 User Management Mobile Application
 
-# Getting Started
+A fully functional **React Native User Management System** that allows users to view, create, update, and delete user profiles with **offline support, image uploads, pagination, and state persistence**.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+This project demonstrates practical usage of modern **React Native architecture**, including **Redux Toolkit, Redux Persist, API integration, offline-first behavior, and modular component design**.
 
-## Step 1: Start Metro
+---
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+# 🚀 Key Features
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+## 🔐 Authentication System
 
-```sh
-# Using npm
-npm start
+The application includes a simple authentication flow.
 
-# OR using Yarn
-yarn start
+### Login Options
+
+Users can log in using either:
+
+• **Email + Password**
+• **Mobile Number + Password**
+
+### Authentication Behavior
+
+* Login state is stored in **Redux**
+* Authentication data is persisted using **Redux Persist**
+* Users remain logged in after closing and reopening the application
+* On logout, all stored data is cleared and the user is redirected to the login screen
+
+### Validation
+
+Input validation is implemented for:
+
+* Email format validation
+* Mobile number validation
+* Password validation
+
+---
+
+# 👤 User Management
+
+The core functionality of the application revolves around managing user profiles.
+
+---
+
+# 📋 User List Screen
+
+Displays a list of all users retrieved from the API.
+
+### Features
+
+* API based user fetching
+* Pagination support
+* Infinite scroll
+* Pull-to-refresh
+* Avatar image display
+* Placeholder avatar when no image is available
+* Floating Action Button for adding new users
+* Cached user list available when offline
+
+### Pagination
+
+The list implements **infinite scrolling pagination**:
+
+* Initial users load when the screen opens
+* Additional users load automatically when reaching the end of the list
+* API requests stop when no more data is available
+
+---
+
+# 👤 User Detail Screen
+
+Displays complete details of a selected user.
+
+### Information Displayed
+
+* Profile Image
+* Full Name
+* Email Address
+* Phone Number
+* Birth Date
+* Gender
+* Address
+
+### Actions Available
+
+Users can:
+
+* **Edit the user**
+* **Delete the user**
+
+### Offline Behavior
+
+If the device is offline:
+
+* Delete action is stored in an **offline queue**
+* The action will automatically sync when internet becomes available
+
+---
+
+# ✏️ Add / Edit User Screen
+
+Used for both creating and editing user profiles.
+
+### Form Fields
+
+* Profile Image
+* First Name
+* Last Name
+* Email
+* Phone Number
+* Dial Code (Country Picker)
+* Birth Date
+* Gender
+* Address
+
+### UI Improvements
+
+* Camera icon overlay for editing profile picture
+* Clean card layout
+* Custom input components
+* Reusable button components
+* Country picker for dial code
+
+### Image Upload
+
+Users can take a picture using the **front camera**.
+
+Steps:
+
+1. Camera permission requested
+2. Photo captured
+3. Image uploaded to **Cloudinary**
+4. Image URL stored with user profile
+
+---
+
+# 📷 Image Upload (Cloudinary)
+
+Images are uploaded using the **Cloudinary Upload API**.
+
+### Flow
+
+User captures image
+⬇
+Image uploaded to Cloudinary
+⬇
+Cloudinary returns secure URL
+⬇
+URL saved in user profile
+
+### Benefits
+
+* No image storage required in backend
+* Fast CDN image delivery
+* Scalable image hosting
+
+---
+
+# 📡 Offline Support
+
+The application implements an **offline-first architecture**.
+
+Users can continue interacting with the app even without internet.
+
+---
+
+# 📦 Redux Persist (Offline Cache)
+
+User data is stored locally using **Redux Persist**.
+
+### Benefits
+
+* User list is cached locally
+* App works without internet
+* Faster app startup
+* Reduced API calls
+
+---
+
+# 🔄 Offline Action Queue
+
+When the user performs actions offline, the app stores them in a queue.
+
+### Offline Actions Supported
+
+* Create User
+* Update User
+* Delete User
+
+These actions are stored locally and executed later.
+
+### Queue Example
+
+If a user:
+
+* Adds a user offline
+* Updates another user
+* Deletes a user
+
+The queue will store:
+
+```
+CREATE_USER
+UPDATE_USER
+DELETE_USER
 ```
 
-## Step 2: Build and run your app
+---
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+# 🔁 Automatic Sync
+
+The application uses **NetInfo** to detect internet connection.
+
+When internet becomes available:
+
+1️⃣ Offline queue starts processing
+2️⃣ All queued actions sync with the API
+3️⃣ Redux store updates
+4️⃣ User list refreshes automatically
+
+During sync:
+
+* UI shows **"Syncing offline changes..."**
+* User interaction is temporarily disabled
+
+---
+
+# ⚙️ Error Handling
+
+Centralized error handling has been implemented.
+
+### API Errors
+
+Handled using **Axios interceptors**
+
+Example scenarios:
+
+* Network failure
+* API error responses
+* Server errors
+
+### UI Feedback
+
+Users receive feedback through:
+
+* Success toast messages
+* Error toast messages
+* Loading indicators
+
+---
+
+# 🎨 UI Architecture
+
+Reusable UI components were created for better maintainability.
+
+### Custom Components
+
+| Component     | Purpose                 |
+| ------------- | ----------------------- |
+| CustomInput   | Reusable text input     |
+| PrimaryButton | Styled button component |
+| UserCard      | User list item UI       |
+| Loader        | Activity indicator      |
+
+### Design System
+
+A shared color system is implemented using:
+
+```
+utils/colors.ts
+```
+
+This ensures consistent UI across the entire application.
+
+---
+
+# 🧠 State Management
+
+The application uses **Redux Toolkit**.
+
+### Redux Slices
+
+#### Auth Slice
+
+Manages authentication state.
+
+Stores:
+
+* Login type (email or mobile)
+* Email or mobile number
+* Login status
+
+---
+
+#### User Slice
+
+Manages user data.
+
+Handles:
+
+* User list
+* Pagination
+* Loading states
+* Offline syncing state
+
+---
+
+# 📁 Project Structure
+
+```
+src
+│
+├── api
+│   ├── apiClient.ts
+│   └── userApi.ts
+│
+├── assets
+│   ├── images
+│   └── index.ts
+│
+├── components
+│   ├── CustomInput.tsx
+│   ├── Loader.tsx
+│   ├── PrimaryButton.tsx
+│   └── UserCard.tsx
+│
+├── navigation
+│   └── AppNavigator.tsx
+│
+├── screens
+│   ├── LoginScreen.tsx
+│   ├── UserListScreen.tsx
+│   ├── UserDetailScreen.tsx
+│   └── AddEditUserScreen.tsx
+│
+├── services
+│   ├── cloudinaryService.ts
+│   ├── offlineQueue.ts
+│   └── syncService.ts
+│
+├── store
+│   ├── store.ts
+│   ├── authSlice.ts
+│   ├── userSlice.ts
+│   └── hooks.ts
+│
+└── utils
+    ├── colors.ts
+    ├── validators.ts
+    └── toast.ts
+```
+
+---
+
+# 🧩 Tech Stack
+
+* React Native CLI
+* TypeScript
+* Redux Toolkit
+* Redux Persist
+* React Navigation
+* Axios
+* React Native Image Picker
+* Cloudinary API
+* NetInfo
+* React Native Permissions
+
+---
+
+# ⚙️ Installation
+
+## Clone Repository
+
+```
+git clone https://github.com/your-username/user-management-app.git
+```
+
+---
+
+## Install Dependencies
+
+```
+npm install
+```
+
+or
+
+```
+yarn install
+```
+
+---
+
+## iOS Setup
+
+```
+cd ios
+pod install
+```
+
+---
+
+## Run Application
 
 ### Android
 
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+```
+npx react-native run-android
 ```
 
 ### iOS
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
+```
+npx react-native run-ios
 ```
 
-Then, and every time you update your native dependencies, run:
+---
 
-```sh
-bundle exec pod install
+# 🔑 Environment Variables
+
+Create a `.env` file.
+
+Example:
+
+```
+API_BASE_URL=https://mockapi.io/api
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_UPLOAD_PRESET=your_upload_preset
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+---
 
-```sh
-# Using npm
-npm run ios
+# 📄 User Data Model
 
-# OR using Yarn
-yarn ios
+The application uses the following user structure returned from the API.
+
+Example user object:
+
+{
+  "first_name": "Emma",
+  "last_name": "Johnson",
+  "image": "https://randomuser.me/api/portraits/women/12.jpg",
+  "phone_number": "4157283941",
+  "dial_code": "+1",
+  "birth_date": "1994-03-12",
+  "address": "742 Evergreen St, San Francisco, USA",
+  "gender": "female",
+  "email": "emma.johnson@example.com",
+  "id": "u1001"
+}
+
+### Field Description
+
+| Field | Description |
+|------|-------------|
+| id | Unique user identifier |
+| first_name | User's first name |
+| last_name | User's last name |
+| email | User email address |
+| phone_number | Phone number |
+| dial_code | Country dial code |
+| birth_date | Date of birth (YYYY-MM-DD) |
+| gender | User gender |
+| address | Residential address |
+| image | Profile image URL |
+
+---
+
+# 📦 Build APK
+
+```
+cd android
+./gradlew assembleRelease
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+APK location:
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+```
+android/app/build/outputs/apk/release/app-release.apk
+```
 
-## Step 3: Modify your app
+---
 
-Now that you have successfully run the app, let's make changes!
+# 🔮 Future Improvements
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+Possible improvements include:
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+* Unit testing
+* Search functionality
+* User filtering
+* Dark mode support
+* Form validation enhancements
+* UI animations
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+---
 
-## Congratulations! :tada:
+# 👨‍💻 Author
 
-You've successfully run and modified your React Native App. :partying_face:
+Ashish Jambukiya
 
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+React Native Developer
