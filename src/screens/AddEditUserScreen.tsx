@@ -401,7 +401,9 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 8,
-        marginRight: 10
+        marginRight: 10,
+        minWidth: 100,
+        alignItems: "center"
     },
 
     genderSelected: {

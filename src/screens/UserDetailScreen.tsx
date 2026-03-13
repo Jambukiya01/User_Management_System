@@ -204,14 +204,15 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: "row",
         justifyContent: "flex-start",
-        paddingVertical: 10,
+        paddingVertical: 12,
         borderBottomWidth: 1,
         borderBottomColor: colors.border,
     },
     rowLabel: {
-        width: 90,
+        width: 120,
         fontSize: 14,
         color: colors.textSecondary,
+        fontWeight: "500",
     },
     rowValue: {
         flex: 1,
@@ -219,6 +220,7 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         color: colors.textPrimary,
         textAlign: "right",
+        flexWrap: "wrap",
     },
     buttons: {
         marginTop: 30,
