@@ -4,11 +4,13 @@ import {
     TextInput,
     StyleSheet,
     Text,
-    TouchableOpacity
+    TouchableOpacity,
+    Image
 } from "react-native";
 
 import CountryPicker, { Country, CountryCode } from "react-native-country-picker-modal";
 import colors from "../utils/colors";
+import { eyeIcon, eyeOffIcon } from "../assets";
 
 interface Props {
     placeholder: string;
@@ -34,6 +36,7 @@ const CustomInput: React.FC<Props> = ({
 }) => {
 
     const [countryCode, setCountryCode] = useState<CountryCode>("IN");
+    const [showPassword, setShowPassword] = useState(false);
 
     const onSelectCountry = (country: Country) => {
         const code = "+" + country.callingCode[0];
@@ -64,10 +67,22 @@ const CustomInput: React.FC<Props> = ({
                     placeholder={placeholder}
                     value={value}
                     onChangeText={onChangeText}
-                    secureTextEntry={secureTextEntry}
+                    secureTextEntry={secureTextEntry && !showPassword}
                     keyboardType={phoneNumber ? "phone-pad" : "default"}
                     placeholderTextColor={colors.textSecondary}
                 />
+
+                {secureTextEntry && (
+                    <TouchableOpacity
+                        onPress={() => setShowPassword(!showPassword)}
+                        style={styles.eyeButton}
+                    >
+                        <Image
+                            source={showPassword ? eyeOffIcon : eyeIcon}
+                            style={styles.eyeIcon}
+                        />
+                    </TouchableOpacity>
+                )}
 
             </View>
 
@@ -83,7 +98,6 @@ const styles = StyleSheet.create({
     container: {
         marginBottom: 16,
     },
-
     inputWrapper: {
         flexDirection: "row",
         alignItems: "center",
@@ -92,32 +106,35 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         backgroundColor: colors.white,
     },
-
     countryButton: {
         flexDirection: "row",
         alignItems: "center",
         paddingHorizontal: 10,
     },
-
     dialCode: {
         marginLeft: 4,
         fontSize: 14,
         color: colors.textPrimary,
     },
-
     input: {
         flex: 1,
         padding: 12,
         color: colors.textPrimary,
     },
-
     phoneInput: {
         borderLeftWidth: 1,
         borderLeftColor: colors.border,
     },
-
+    eyeButton: {
+        paddingHorizontal: 12,
+    },
+    eyeIcon: {
+        width: 20,
+        height: 20,
+        resizeMode: "contain",
+    },
     error: {
         color: colors.error,
         marginTop: 4,
-    },
+    }
 });

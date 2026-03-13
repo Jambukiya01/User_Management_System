@@ -53,7 +53,7 @@ const AddEditUserScreen: React.FC<Props> = ({ route, navigation }) => {
     const [dialCode, setDialCode] = useState("+91");
     const [birthDate, setBirthDate] = useState(new Date());
     const [datePickerOpen, setDatePickerOpen] = useState(false);
-    const [gender, setGender] = useState("male");
+    const [gender, setGender] = useState("Male");
     const [error, setError] = useState<FormErrors>({});
     const [image, setImage] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
@@ -124,9 +124,7 @@ const AddEditUserScreen: React.FC<Props> = ({ route, navigation }) => {
         if (!firstName) errors.firstName = Strings.firstNameError;
         if (!lastName) errors.lastName = Strings.lastNameError;
         if (!address) errors.address = Strings.addressError;
-        if (!birthDate) errors.birthDate = Strings.birthDateError;
         if (!gender) errors.gender = Strings.genderError;
-        if (!image) errors.image = Strings.imageError;
         const emailError = validateEmail(email);
         if (emailError) {
             setError({ email: emailError });

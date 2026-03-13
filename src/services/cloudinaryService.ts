@@ -3,6 +3,7 @@ import { Strings } from "../utils/Strings";
 
 export const uploadImage = async (imageUri: string): Promise<string> => {
     try {
+        console.log("---Upload image for ", imageUri)
         const data = new FormData();
         data.append("file", {
             uri: imageUri,
@@ -32,5 +33,7 @@ export const uploadImage = async (imageUri: string): Promise<string> => {
         return json.secure_url;
     } catch (error: any) {
         throw new Error(error.message || Strings.imageUploadFailed);
+    } finally {
+        console.log("---Upload image for ", imageUri)
     }
 };

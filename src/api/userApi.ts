@@ -12,7 +12,9 @@ export const getUsers = async (
         const res = await apiClient.get(API_URL, {
             params: {
                 page,
-                limit
+                limit,
+                sortBy: "id",
+                order: "asc"
             },
         });
         console.log("---Get user list for ", page, limit, res.data)
